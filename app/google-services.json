@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "82195245800",
+    "project_id": "gradevitian-j",
+    "storage_bucket": "gradevitian-j.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82195245800:android:bd07970c2ffd6c9526775d",
+        "android_client_info": {
+          "package_name": "me.jitish.gradevitian"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6AZQgya1cp7NyTx5xYWfbMAfYMy8LGkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
