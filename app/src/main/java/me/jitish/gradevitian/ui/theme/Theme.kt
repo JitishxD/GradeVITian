@@ -57,7 +57,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun GradeVitianTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
