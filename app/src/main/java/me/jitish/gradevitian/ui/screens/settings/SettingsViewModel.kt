@@ -12,8 +12,8 @@ import me.jitish.gradevitian.domain.repository.PreferencesRepository
 import javax.inject.Inject
 
 data class SettingsUiState(
-    val darkMode: Boolean = false,
-    val dynamicColor: Boolean = true
+    val darkMode: Boolean = true,
+    val dynamicColor: Boolean = false
 )
 
 @HiltViewModel
