@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import me.jitish.gradevitian.ui.theme.AttendanceAmber
 import me.jitish.gradevitian.ui.theme.DangerRed
 import me.jitish.gradevitian.ui.theme.GpaGreen
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,9 +84,9 @@ fun GradeTopAppBar(
 @Composable
 fun ResultCard(
     title: String,
+    modifier: Modifier = Modifier,
     subtitle: String = "",
-    isError: Boolean = false,
-    modifier: Modifier = Modifier
+    isError: Boolean = false
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -126,9 +127,9 @@ fun ResultCard(
 fun ActionButtons(
     onCalculate: () -> Unit,
     onReset: () -> Unit,
+    modifier: Modifier = Modifier,
     onSave: (() -> Unit)? = null,
-    calculateLabel: String = "Calculate",
-    modifier: Modifier = Modifier
+    calculateLabel: String = "Calculate"
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         OutlinedButton(
@@ -197,7 +198,7 @@ fun AttendanceBar(
                     .background(color)
             )
             Text(
-                text = "${String.format("%.2f", percentage)}%",
+                text = "${String.format(Locale.US, "%.2f", percentage)}%",
                 modifier = Modifier.align(Alignment.Center),
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,

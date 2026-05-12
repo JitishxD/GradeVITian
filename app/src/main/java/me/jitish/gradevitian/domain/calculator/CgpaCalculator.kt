@@ -1,6 +1,7 @@
 package me.jitish.gradevitian.domain.calculator
 
 import me.jitish.gradevitian.domain.model.SemesterEntry
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -73,7 +74,7 @@ class CgpaCalculator @Inject constructor() {
 
         return CgpaValidation.Success(
             CgpaResult(
-                cgpa = String.format("%.4f", cgpa).toDouble(),
+                cgpa = String.format(Locale.US, "%.4f", cgpa).toDouble(),
                 totalCredits = totalCredits,
                 message = message
             )
@@ -105,7 +106,7 @@ class CgpaCalculator @Inject constructor() {
         if (completedCredits > 300 || currentSemCredits > 50) {
             return CgpaValidation.Error(
                 "Kindly check your entries.",
-                "Credits limitation (1 <= Credits Completed <= 300 & 1 <= Credits this sem <= 50)."
+                "Credits limitation (1 <= Credits Completed <= 300 & 1 <= Credits this sem <= 50), Exclude P/pass-fail credits."
             )
         }
 
@@ -123,7 +124,7 @@ class CgpaCalculator @Inject constructor() {
 
         return CgpaValidation.Success(
             CgpaResult(
-                cgpa = String.format("%.3f", result).toDouble(),
+                cgpa = String.format(Locale.US, "%.3f", result).toDouble(),
                 totalCredits = completedCredits + currentSemCredits,
                 message = message
             )

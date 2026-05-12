@@ -45,6 +45,7 @@ import me.jitish.gradevitian.ui.components.ActionButtons
 import me.jitish.gradevitian.ui.components.DropdownSelector
 import me.jitish.gradevitian.ui.components.GradeTopAppBar
 import me.jitish.gradevitian.ui.components.ResultCard
+import me.jitish.gradevitian.ui.components.boldTextParts
 
 @Composable
 fun GpaScreen(
@@ -80,7 +81,10 @@ fun GpaScreen(
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Enter your course credits and grades to calculate your GPA.",
+                    text = boldTextParts(
+                        text = "Enter your course credits and grades to calculate your GPA. \nP/pass-fail is earned, not averaged.",
+                        "P/pass-fail"
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -173,7 +177,7 @@ private fun CourseRow(
 
             DropdownSelector(
                 label = "Grade",
-                options = listOf("-", "S", "A", "B", "C", "D", "E", "F", "N"),
+                options = listOf("-", "S", "A", "B", "C", "D", "E", "F", "N", "P"),
                 selected = selectedGrade,
                 onSelected = onGradeSelected,
                 modifier = Modifier.weight(1f)

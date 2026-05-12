@@ -50,6 +50,7 @@ import kotlinx.coroutines.launch
 import me.jitish.gradevitian.ui.components.ActionButtons
 import me.jitish.gradevitian.ui.components.GradeTopAppBar
 import me.jitish.gradevitian.ui.components.ResultCard
+import me.jitish.gradevitian.ui.components.boldTextParts
 
 @Composable
 fun CgpaScreen(
@@ -120,7 +121,10 @@ private fun SemesterWiseTab(uiState: CgpaUiState, viewModel: CgpaViewModel) {
         item {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "Enter your semester-wise credits and GPA to calculate CGPA.",
+                text = boldTextParts(
+                    text = "Enter your semester-wise credits and GPA to calculate CGPA. \nExclude P/pass-fail and other non-graded credits.",
+                    "P/pass-fail"
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -183,7 +187,10 @@ private fun InstantCgpaTab(uiState: CgpaUiState, viewModel: CgpaViewModel) {
         item {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "Quickly calculate your new CGPA after the current semester.",
+                text = boldTextParts(
+                    text = "Quickly calculate your new CGPA after the current semester. \nExclude P/pass-fail credits from both credit fields.",
+                    "P/pass-fail"
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import me.jitish.gradevitian.ui.components.ActionButtons
 import me.jitish.gradevitian.ui.components.GradeTopAppBar
 import me.jitish.gradevitian.ui.components.ResultCard
+import me.jitish.gradevitian.ui.components.boldTextParts
 
 @Composable
 fun EstimatorScreen(
@@ -54,7 +55,10 @@ fun EstimatorScreen(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "Find the minimum GPA you need in your next semester to achieve your desired CGPA.",
+                text = boldTextParts(
+                    text = "Find the minimum GPA you need in your next semester to achieve your desired CGPA. \nUse graded credits only; skip P/pass-fail.",
+                    "P/pass-fail"
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -98,7 +102,8 @@ fun EstimatorScreen(
                             label = { Text("Credits Done") },
                             modifier = Modifier.weight(1f),
                             singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            supportingText = { Text("Graded credits only") }
                         )
                     }
 
@@ -112,7 +117,14 @@ fun EstimatorScreen(
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        supportingText = { Text("Credits you're taking this semester") }
+                        supportingText = {
+                            Text(
+                                boldTextParts(
+                                    text = "Credits you're taking this semester, Skip P/pass-fail credits",
+                                    "P/pass-fail"
+                                )
+                            )
+                        }
                     )
                 }
             }

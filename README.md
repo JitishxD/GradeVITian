@@ -10,7 +10,7 @@ A Android application for VIT students to calculate GPA, CGPA, predict grades, a
 
 | Feature | Description |
 |---|---|
-| **GPA Calculator** | Calculate semester GPA from course credits and grades (S/A/B/C/D/E/F/N).|
+| **GPA Calculator** | Calculate semester GPA from course credits and grades (S/A/B/C/D/E/F/N, excluding P/pass-fail courses).|
 | **CGPA Calculator** | Semester-wise CGPA or instant CGPA from current stats. |
 | **CGPA Estimator** | Find the minimum GPA needed next semester to achieve your target CGPA. |
 | **Attendance Calculator** | Two modes: Simple (present/absent) and Detailed (total classes + present or absent). |

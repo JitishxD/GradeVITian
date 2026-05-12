@@ -2,13 +2,15 @@ package me.jitish.gradevitian.domain.calculator
 
 import me.jitish.gradevitian.domain.model.CourseEntry
 import me.jitish.gradevitian.domain.model.Grade
+import java.util.Locale
 import javax.inject.Inject
 
 /**
- * GPA Calculator - matches referenceWebCode/GPA Calculator.js exactly.
+ * GPA Calculator.
  *
  * Formula: GPA = Σ(grade_point × credits) / Σ(credits)
  * Grade points: S=10, A=9, B=8, C=7, D=6, E=5, F=0, N=0
+ * P is pass/fail and excluded from both sums.
  * Result rounded to 4 decimal places.
  */
 class GpaCalculator @Inject constructor() {
@@ -45,16 +47,25 @@ class GpaCalculator @Inject constructor() {
             )
         }
 
-        val validCourses = activeCourses.filter { it.credits > 0 && it.grade != Grade.NONE }
+        val completedCourses = activeCourses.filter { it.credits > 0 && it.grade != Grade.NONE }
 
-        if (validCourses.isEmpty()) {
+        if (completedCourses.isEmpty()) {
             return GpaValidation.Error(
                 "Please enter at least one course with credits and grade."
             )
         }
 
-        val totalCredits = validCourses.sumOf { it.credits }
-        val totalGradePoints = validCourses.sumOf { it.grade.gradePoint * it.credits }
+        val gpaCourses = completedCourses.filter { it.grade.countsTowardGpa }
+
+        if (gpaCourses.isEmpty()) {
+            return GpaValidation.Error(
+                "Please enter at least one graded course with credits.",
+                "P/pass-fail courses are completed credits, but they are excluded from GPA."
+            )
+        }
+
+        val totalCredits = gpaCourses.sumOf { it.credits }
+        val totalGradePoints = gpaCourses.sumOf { (it.grade.gradePoint ?: 0) * it.credits }
 
         if (totalCredits == 0) {
             return GpaValidation.Error("Total credits cannot be zero.")
@@ -71,7 +82,7 @@ class GpaCalculator @Inject constructor() {
 
         return GpaValidation.Success(
             GpaResult(
-                gpa = String.format("%.4f", gpa).toDouble(),
+                gpa = String.format(Locale.US, "%.4f", gpa).toDouble(),
                 totalCredits = totalCredits,
                 totalGradePoints = totalGradePoints,
                 message = message
@@ -79,4 +90,3 @@ class GpaCalculator @Inject constructor() {
         )
     }
 }
-

@@ -13,6 +13,11 @@
 .externalNativeBuild
 .cxx
 
+.gradle-home
+.gradle-user
+.gradle-user-home/
+.gradle-home-codex-verify
+
 # ===== Android / Gradle / Jetpack Compose =====
 # Built APKs, AABs, and other generated artifacts
 *.apk

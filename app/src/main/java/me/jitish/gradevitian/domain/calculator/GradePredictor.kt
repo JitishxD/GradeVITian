@@ -1,6 +1,7 @@
 package me.jitish.gradevitian.domain.calculator
 
 import me.jitish.gradevitian.domain.model.Grade
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.ceil
 
@@ -77,7 +78,8 @@ class GradePredictor @Inject constructor() {
             return "Your obtained original marks shouldn't be greater than maximum original marks."
         }
         val result = (obtainedOriginal / maxOriginal) * maxWeightage
-        return "Your obtained weightage mark is ${String.format("%.2f", result)}. You have secured ${String.format("%.2f", result)} out of ${maxWeightage.toInt()}."
+        val formattedResult = String.format(Locale.US, "%.2f", result)
+        return "Your obtained weightage mark is $formattedResult. You have secured $formattedResult out of ${maxWeightage.toInt()}."
     }
 
     fun predict(input: PredictionInput): PredictionValidation {
@@ -203,7 +205,7 @@ class GradePredictor @Inject constructor() {
 
         return PredictionValidation.Success(
             PredictionResult(
-                totalMarks = String.format("%.4f", totalMarks).toDouble(),
+                totalMarks = String.format(Locale.US, "%.4f", totalMarks).toDouble(),
                 roundedMarks = ceil(totalMarks).toInt(),
                 predictedGrade = grade,
                 message = "If this course is graded under Absolute grading, your grade is '${grade.label}'."

@@ -1,5 +1,6 @@
 package me.jitish.gradevitian.domain.calculator
 
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -40,7 +41,7 @@ class CgpaEstimator @Inject constructor() {
         if (completedCredits > 300 || newCredits > 50) {
             return EstimationValidation.Error(
                 "Kindly check your entries.",
-                "Credits limitation (1 <= Credits Completed <= 300 & 1 <= Credits Taken <= 50)."
+                "Credits limitation (1 <= Credits Completed <= 300 & 1 <= Credits Taken <= 50), Exclude P/pass-fail credits."
             )
         }
 
@@ -66,7 +67,7 @@ class CgpaEstimator @Inject constructor() {
 
         return EstimationValidation.Success(
             EstimationResult(
-                requiredGpa = String.format("%.3f", requiredGpa).toDouble(),
+                requiredGpa = String.format(Locale.US, "%.3f", requiredGpa).toDouble(),
                 message = message
             )
         )

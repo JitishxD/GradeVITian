@@ -1,5 +1,6 @@
 package me.jitish.gradevitian.domain.calculator
 
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -88,7 +89,7 @@ class AttendanceCalculator @Inject constructor() {
     }
 
     private fun buildResult(percentage: Double): AttendanceValidation.Success {
-        val formatted = String.format("%.2f", percentage).toDouble()
+        val formatted = String.format(Locale.US, "%.2f", percentage).toDouble()
         val status = when {
             formatted >= 75.0 -> AttendanceStatus.GOOD
             formatted >= 50.0 -> AttendanceStatus.WARNING
