@@ -187,16 +187,18 @@ Run using android studio...
 ## 🧮 Calculation Formulas
 
 
-| Calculator | Formula |
-|---|---|
-| **GPA** | `Σ(gradePoint × credits) / Σ(credits)` — grades: S=10, A=9, B=8, C=7, D=6, E=5, F=0, N=0 |
-| **CGPA** | `Σ(semCredits × semGPA) / Σ(semCredits)` |
-| **Instant CGPA** | `(semGPA × semCredits + currentCGPA × completedCredits) / (semCredits + completedCredits)` |
-| **CGPA Estimator** | `requiredGPA = (desiredCGPA × (completed + new) - currentCGPA × completed) / new` |
-| **Attendance (Simple)** | `present / (present + absent) × 100` |
-| **Attendance (Detailed)** | `present / total × 100` or `(total - absent) / total × 100` |
+| Calculator | Formula                                                                                                                                                                                             |
+|---|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **GPA** | `Σ(gradePoint × credits) / Σ(credits)` — grades: S=10, A=9, B=8, C=7, D=6, E=5, F=0, N=0                                                                                                            |
+| **CGPA** | `Σ(semCredits × semGPA) / Σ(semCredits)`                                                                                                                                                            |
+| **Instant CGPA** | `(semGPA × semCredits + currentCGPA × completedCredits) / (semCredits + completedCredits)`                                                                                                          |
+| **CGPA Estimator** | `requiredGPA = (desiredCGPA × (completed + new) - currentCGPA × completed) / new`                                                                                                                   |
+| **Attendance (Simple)** | `present / (present + absent) × 100`                                                                                                                                                                |
+| **Attendance (Detailed)** | `present / total × 100` or `(total - absent) / total × 100`                                                                                                                                         |
 | **Grade Predictor** | Theory: `(CAT1/50×15 + CAT2/50×15 + DA1 + DA2 + DA3 + FAT×40/100)` weighted by credits. Lab: `(internal + FAT×40/50)`. J-comp: `(R1+R2+R3)`. Grade: ≥90=S, ≥80=A, ≥70=B, ≥60=C, ≥55=D, ≥50=E, <50=F |
-| **Grade Calculator (Relative)** | Formula mode is selected in **Settings**. **Mode 1:** `Total = 0.3CAT1 + 0.3CAT2 + 0.3TEE + Attendance + Other Assessment`. **Mode 2:** `Total = 0.6Mid Term + 0.3TEE + Attendance + Other Assessment`. `F` if `TEE < 40` or `Total < 40`. Else thresholds use μ/σ: `S: ≥ μ+1.5σ`, `A: [μ+0.5σ, μ+1.5σ)`, `B: [μ-0.5σ, μ+0.5σ)`, `C: [μ-σ, μ-0.5σ)`, `D: [μ-1.5σ, μ-σ)`, `E: < μ-1.5σ`. |
+| **Grade Calculator (Relative)** | See the image below                                                                                                                                                                                 |
+
+![Relative Grading Formula](docs/relative_grading_formula.png)
 
 ---
 
