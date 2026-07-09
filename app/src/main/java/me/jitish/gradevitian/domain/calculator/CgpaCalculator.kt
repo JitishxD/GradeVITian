@@ -5,7 +5,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 /**
- * CGPA Calculator - matches referenceWebCode/CGPA Calculator.js exactly.
+ * CGPA Calculator.
  *
  * Semester-wise: CGPA = Σ(semCredits × semGPA) / Σ(semCredits)
  * Result rounded to 4 decimal places.

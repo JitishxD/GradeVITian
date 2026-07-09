@@ -4,7 +4,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 /**
- * Attendance Calculator - matches referenceWebCode/Attendance Calculator.js exactly.
+ * Attendance Calculator.
  *
  * Format 1 (Simple): attendance% = classesPresent / (classesPresent + classesAbsent) × 100
  * Format 2 (Total):  attendance% = classesPresent / totalClasses × 100

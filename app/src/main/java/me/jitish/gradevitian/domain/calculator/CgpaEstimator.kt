@@ -4,7 +4,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 /**
- * CGPA Estimator - matches referenceWebCode/CGPA Estimator.js exactly.
+ * CGPA Estimator.
  *
  * Formula: requiredGPA = (desiredCGPA × (completedCredits + newCredits) - currentCGPA × completedCredits) / newCredits
  */

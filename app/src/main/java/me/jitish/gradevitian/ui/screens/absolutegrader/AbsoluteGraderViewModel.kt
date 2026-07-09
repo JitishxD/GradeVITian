@@ -1,19 +1,18 @@
-package me.jitish.gradevitian.ui.screens.gradepredictor
+package me.jitish.gradevitian.ui.screens.absolutegrader
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import me.jitish.gradevitian.domain.calculator.GradePredictor
+import me.jitish.gradevitian.domain.calculator.AbsoluteGrader
 import javax.inject.Inject
 
-data class GradePredictorUiState(
+data class AbsoluteGraderUiState(
     val courseCredits: String = "",
     val theoryCredits: String = "",
     val labCredits: String = "",
     val jCompCredits: String = "",
-    // Theory
     val cat1: String = "",
     val cat2: String = "",
     val da1: String = "",
@@ -21,31 +20,27 @@ data class GradePredictorUiState(
     val da3: String = "",
     val theoryFat: String = "",
     val additionalLearning: String = "",
-    // Lab
     val labInternal: String = "",
     val labFat: String = "",
-    // J-Component
     val review1: String = "",
     val review2: String = "",
     val review3: String = "",
-    // Weightage converter
     val maxOriginal: String = "",
     val maxWeightage: String = "",
     val obtainedOriginal: String = "",
     val weightageResult: String? = null,
-    // Result
     val resultTitle: String? = null,
     val resultSubtitle: String? = null,
     val isError: Boolean = false
 )
 
 @HiltViewModel
-class GradePredictorViewModel @Inject constructor(
-    private val gradePredictor: GradePredictor
+class AbsoluteGraderViewModel @Inject constructor(
+    private val absoluteGrader: AbsoluteGrader
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(GradePredictorUiState())
-    val uiState: StateFlow<GradePredictorUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(AbsoluteGraderUiState())
+    val uiState: StateFlow<AbsoluteGraderUiState> = _uiState.asStateFlow()
 
     fun updateField(field: String, value: String) {
         _uiState.value = when (field) {
@@ -74,7 +69,7 @@ class GradePredictorViewModel @Inject constructor(
 
     fun predict() {
         val s = _uiState.value
-        val input = GradePredictor.PredictionInput(
+        val input = AbsoluteGrader.PredictionInput(
             courseCredits = s.courseCredits.toIntOrNull() ?: 0,
             theoryCredits = s.theoryCredits.toIntOrNull() ?: 0,
             labCredits = s.labCredits.toIntOrNull() ?: 0,
@@ -92,15 +87,15 @@ class GradePredictorViewModel @Inject constructor(
             review2 = s.review2.toDoubleOrNull(),
             review3 = s.review3.toDoubleOrNull()
         )
-        when (val result = gradePredictor.predict(input)) {
-            is GradePredictor.PredictionValidation.Success -> {
+        when (val result = absoluteGrader.predict(input)) {
+            is AbsoluteGrader.PredictionValidation.Success -> {
                 _uiState.value = s.copy(
                     resultTitle = "Total Marks: ${result.result.totalMarks} ~ ${result.result.roundedMarks}",
                     resultSubtitle = result.result.message,
                     isError = false
                 )
             }
-            is GradePredictor.PredictionValidation.Error -> {
+            is AbsoluteGrader.PredictionValidation.Error -> {
                 _uiState.value = s.copy(
                     resultTitle = result.message,
                     resultSubtitle = result.detail,
@@ -112,7 +107,7 @@ class GradePredictorViewModel @Inject constructor(
 
     fun convertWeightage() {
         val s = _uiState.value
-        val result = gradePredictor.convertWeightage(
+        val result = absoluteGrader.convertWeightage(
             maxOriginal = s.maxOriginal.toDoubleOrNull() ?: 0.0,
             maxWeightage = s.maxWeightage.toDoubleOrNull() ?: 0.0,
             obtainedOriginal = s.obtainedOriginal.toDoubleOrNull() ?: 0.0
@@ -121,7 +116,7 @@ class GradePredictorViewModel @Inject constructor(
     }
 
     fun reset() {
-        _uiState.value = GradePredictorUiState()
+        _uiState.value = AbsoluteGraderUiState()
     }
 
     fun resetWeightage() {
@@ -130,4 +125,3 @@ class GradePredictorViewModel @Inject constructor(
         )
     }
 }
-

@@ -48,7 +48,7 @@ fun HomeScreen(
     onNavigateToCgpa: () -> Unit,
     onNavigateToEstimator: () -> Unit,
     onNavigateToAttendance: () -> Unit,
-    onNavigateToGradePredictor: () -> Unit,
+    onNavigateToAbsoluteGrader: () -> Unit,
     onNavigateToGradeCalculator: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToProfile: () -> Unit,
@@ -167,10 +167,10 @@ fun HomeScreen(
 
             item {
                 FeatureCard(
-                    title = "Grade\nPredictor",
-                    subtitle = "Predict grades",
+                    title = "Absolute\nGrader",
+                    subtitle = "Absolute grading",
                     icon = Icons.Default.School,
-                    onClick = onNavigateToGradePredictor
+                    onClick = onNavigateToAbsoluteGrader
                 )
             }
 

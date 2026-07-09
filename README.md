@@ -14,7 +14,7 @@ A Android application for VIT students to calculate GPA, CGPA, predict grades, a
 | **CGPA Calculator** | Semester-wise CGPA or instant CGPA from current stats. |
 | **CGPA Estimator** | Find the minimum GPA needed next semester to achieve your target CGPA. |
 | **Attendance Calculator** | Two modes: Simple (present/absent) and Detailed (total classes + present or absent). |
-| **Grade Predictor** | Predict your course grade from CAT, DA, FAT, Lab, and J-Component marks (absolute grading). |
+| **Absolute Grader** | Predict your course grade from CAT, DA, FAT, Lab, and J-Component marks (absolute grading). |
 | **Grade Calculator** | Relative grading calculator with two modes: compute μ/σ from class totals or enter μ/σ directly. |
 | **Weightage Converter** | Convert marks from one scale to another. |
 | **Saved History** | Firebase-synced calculation history for GPA, CGPA, and attendance records. |
@@ -67,7 +67,7 @@ app/src/main/java/me/jitish/gradevitian/
 │   │   ├── CgpaCalculator.kt      # CGPA + Instant CGPA
 │   │   ├── CgpaEstimator.kt       # Required GPA estimator
 │   │   ├── AttendanceCalculator.kt # Attendance % (2 formats)
-│   │   ├── GradePredictor.kt      # Grade prediction + Weightage converter
+│   │   ├── AbsoluteGrader.kt      # Absolute grading + Weightage converter
 │   │   └── RelativeGradeCalculator.kt # Relative grading calculator logic
 │   ├── model/                      # Data classes
 │   ├── repository/                 # Repository interfaces
@@ -87,7 +87,7 @@ app/src/main/java/me/jitish/gradevitian/
     │   ├── estimator/              # CGPA Estimator
     │   ├── attendance/             # Attendance Calculator (2 tabs)
     │   ├── gradecalculator/        # Grade Calculator (relative grading)
-    │   ├── gradepredictor/         # Grade Predictor + Weightage Converter
+    │   ├── absolutegrader/         # Absolute Grader + Weightage Converter
     │   ├── history/                # Saved records (3 tabs)
     │   ├── profile/                # User profile
     │   ├── settings/               # App settings
@@ -195,7 +195,7 @@ Run using android studio...
 | **CGPA Estimator** | `requiredGPA = (desiredCGPA × (completed + new) - currentCGPA × completed) / new`                                                                                                                   |
 | **Attendance (Simple)** | `present / (present + absent) × 100`                                                                                                                                                                |
 | **Attendance (Detailed)** | `present / total × 100` or `(total - absent) / total × 100`                                                                                                                                         |
-| **Grade Predictor** | Theory: `(CAT1/50×15 + CAT2/50×15 + DA1 + DA2 + DA3 + FAT×40/100)` weighted by credits. Lab: `(internal + FAT×40/50)`. J-comp: `(R1+R2+R3)`. Grade: ≥90=S, ≥80=A, ≥70=B, ≥60=C, ≥55=D, ≥50=E, <50=F |
+| **Absolute Grader** | Theory: `(CAT1/50×15 + CAT2/50×15 + DA1 + DA2 + DA3 + FAT×40/100)` weighted by credits. Lab: `(internal + FAT×40/50)`. J-comp: `(R1+R2+R3)`. Grade: ≥90=S, ≥80=A, ≥70=B, ≥60=C, ≥55=D, ≥50=E, <50=F |
 | **Grade Calculator (Relative)** | See the image below                                                                                                                                                                                 |
 
 ![Relative Grading Formula](docs/relative_grading_formula.png)
