@@ -23,6 +23,7 @@ class PreferencesRepositoryImpl @Inject constructor(
     companion object {
         private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
         private val DYNAMIC_COLOR_KEY = booleanPreferencesKey("dynamic_color")
+        private val USE_MID_TERM_FORMULA_KEY = booleanPreferencesKey("use_mid_term_formula")
     }
 
     override fun observeDarkMode(): Flow<Boolean> =
@@ -37,6 +38,13 @@ class PreferencesRepositoryImpl @Inject constructor(
 
     override suspend fun setDynamicColor(enabled: Boolean) {
         context.dataStore.edit { prefs -> prefs[DYNAMIC_COLOR_KEY] = enabled }
+    }
+
+    override fun observeUseMidTermFormula(): Flow<Boolean> =
+        context.dataStore.data.map { prefs -> prefs[USE_MID_TERM_FORMULA_KEY] ?: false }
+
+    override suspend fun setUseMidTermFormula(enabled: Boolean) {
+        context.dataStore.edit { prefs -> prefs[USE_MID_TERM_FORMULA_KEY] = enabled }
     }
 }
 

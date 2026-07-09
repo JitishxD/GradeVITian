@@ -15,10 +15,11 @@ A Android application for VIT students to calculate GPA, CGPA, predict grades, a
 | **CGPA Estimator** | Find the minimum GPA needed next semester to achieve your target CGPA. |
 | **Attendance Calculator** | Two modes: Simple (present/absent) and Detailed (total classes + present or absent). |
 | **Grade Predictor** | Predict your course grade from CAT, DA, FAT, Lab, and J-Component marks (absolute grading). |
+| **Grade Calculator** | Relative grading calculator with two modes: compute μ/σ from class totals or enter μ/σ directly. |
 | **Weightage Converter** | Convert marks from one scale to another. |
 | **Saved History** | Firebase-synced calculation history for GPA, CGPA, and attendance records. |
 | **User Account** | Email/Password and Google Sign-In via Firebase Authentication. |
-| **Settings** | Dark mode, dynamic colors (Material You on Android 12+). |
+| **Settings** | Dark mode, dynamic colors (Material You on Android 12+), and Grade Calculator formula mode switch. |
 
 Feel Free to open issue if there is any inaccuracy in calculation.
 
@@ -66,7 +67,8 @@ app/src/main/java/me/jitish/gradevitian/
 │   │   ├── CgpaCalculator.kt      # CGPA + Instant CGPA
 │   │   ├── CgpaEstimator.kt       # Required GPA estimator
 │   │   ├── AttendanceCalculator.kt # Attendance % (2 formats)
-│   │   └── GradePredictor.kt      # Grade prediction + Weightage converter
+│   │   ├── GradePredictor.kt      # Grade prediction + Weightage converter
+│   │   └── RelativeGradeCalculator.kt # Relative grading calculator logic
 │   ├── model/                      # Data classes
 │   ├── repository/                 # Repository interfaces
 │   └── util/
@@ -84,6 +86,7 @@ app/src/main/java/me/jitish/gradevitian/
     │   ├── cgpa/                   # CGPA Calculator (2 tabs)
     │   ├── estimator/              # CGPA Estimator
     │   ├── attendance/             # Attendance Calculator (2 tabs)
+    │   ├── gradecalculator/        # Grade Calculator (relative grading)
     │   ├── gradepredictor/         # Grade Predictor + Weightage Converter
     │   ├── history/                # Saved records (3 tabs)
     │   ├── profile/                # User profile
@@ -193,6 +196,7 @@ Run using android studio...
 | **Attendance (Simple)** | `present / (present + absent) × 100` |
 | **Attendance (Detailed)** | `present / total × 100` or `(total - absent) / total × 100` |
 | **Grade Predictor** | Theory: `(CAT1/50×15 + CAT2/50×15 + DA1 + DA2 + DA3 + FAT×40/100)` weighted by credits. Lab: `(internal + FAT×40/50)`. J-comp: `(R1+R2+R3)`. Grade: ≥90=S, ≥80=A, ≥70=B, ≥60=C, ≥55=D, ≥50=E, <50=F |
+| **Grade Calculator (Relative)** | Formula mode is selected in **Settings**. **Mode 1:** `Total = 0.3CAT1 + 0.3CAT2 + 0.3TEE + Attendance + Other Assessment`. **Mode 2:** `Total = 0.6Mid Term + 0.3TEE + Attendance + Other Assessment`. `F` if `TEE < 40` or `Total < 40`. Else thresholds use μ/σ: `S: ≥ μ+1.5σ`, `A: [μ+0.5σ, μ+1.5σ)`, `B: [μ-0.5σ, μ+0.5σ)`, `C: [μ-σ, μ-0.5σ)`, `D: [μ-1.5σ, μ-σ)`, `E: < μ-1.5σ`. |
 
 ---
 

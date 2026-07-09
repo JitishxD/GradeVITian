@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 data class SettingsUiState(
     val darkMode: Boolean = true,
-    val dynamicColor: Boolean = false
+    val dynamicColor: Boolean = false,
+    val useMidTermFormula: Boolean = false
 )
 
 @HiltViewModel
@@ -23,9 +24,14 @@ class SettingsViewModel @Inject constructor(
 
     val uiState: StateFlow<SettingsUiState> = combine(
         preferencesRepository.observeDarkMode(),
-        preferencesRepository.observeDynamicColor()
-    ) { darkMode, dynamicColor ->
-        SettingsUiState(darkMode = darkMode, dynamicColor = dynamicColor)
+        preferencesRepository.observeDynamicColor(),
+        preferencesRepository.observeUseMidTermFormula()
+    ) { darkMode, dynamicColor, useMidTermFormula ->
+        SettingsUiState(
+            darkMode = darkMode,
+            dynamicColor = dynamicColor,
+            useMidTermFormula = useMidTermFormula
+        )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsUiState())
 
     fun toggleDarkMode(enabled: Boolean) {
@@ -34,6 +40,10 @@ class SettingsViewModel @Inject constructor(
 
     fun toggleDynamicColor(enabled: Boolean) {
         viewModelScope.launch { preferencesRepository.setDynamicColor(enabled) }
+    }
+
+    fun toggleUseMidTermFormula(enabled: Boolean) {
+        viewModelScope.launch { preferencesRepository.setUseMidTermFormula(enabled) }
     }
 }
 

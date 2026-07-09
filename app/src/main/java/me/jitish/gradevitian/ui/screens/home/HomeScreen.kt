@@ -49,6 +49,7 @@ fun HomeScreen(
     onNavigateToEstimator: () -> Unit,
     onNavigateToAttendance: () -> Unit,
     onNavigateToGradePredictor: () -> Unit,
+    onNavigateToGradeCalculator: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToProfile: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -170,6 +171,15 @@ fun HomeScreen(
                     subtitle = "Predict grades",
                     icon = Icons.Default.School,
                     onClick = onNavigateToGradePredictor
+                )
+            }
+
+            item {
+                FeatureCard(
+                    title = "Grade\nCalculator",
+                    subtitle = "Relative grading",
+                    icon = Icons.Default.Functions,
+                    onClick = onNavigateToGradeCalculator
                 )
             }
 

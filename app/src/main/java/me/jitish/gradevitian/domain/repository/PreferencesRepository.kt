@@ -7,5 +7,7 @@ interface PreferencesRepository {
     suspend fun setDarkMode(enabled: Boolean)
     fun observeDynamicColor(): Flow<Boolean>
     suspend fun setDynamicColor(enabled: Boolean)
+    fun observeUseMidTermFormula(): Flow<Boolean>
+    suspend fun setUseMidTermFormula(enabled: Boolean)
 }
 

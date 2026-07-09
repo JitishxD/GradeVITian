@@ -87,6 +87,43 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
+                text = "Grade Calculator",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                )
+            ) {
+                Column {
+                    ListItem(
+                        headlineContent = { Text("Use Mid Term Formula") },
+                        supportingContent = {
+                            Text(
+                                if (uiState.useMidTermFormula) {
+                                    "Formula 2: 0.6Mid Term + 0.3TEE + Attendance + Other Assessment"
+                                } else {
+                                    "Formula 1: 0.3CAT1 + 0.3CAT2 + 0.3TEE + Attendance + Other Assessment"
+                                }
+                            )
+                        },
+                        trailingContent = {
+                            Switch(
+                                checked = uiState.useMidTermFormula,
+                                onCheckedChange = viewModel::toggleUseMidTermFormula
+                            )
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
                 text = "About",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
