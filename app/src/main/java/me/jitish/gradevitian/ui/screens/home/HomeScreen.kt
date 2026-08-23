@@ -142,15 +142,6 @@ fun HomeScreen(
 
             item {
                 FeatureCard(
-                    title = "CGPA\nEstimator",
-                    subtitle = "Target GPA",
-                    icon = Icons.AutoMirrored.Filled.TrendingUp,
-                    onClick = onNavigateToEstimator
-                )
-            }
-
-            item {
-                FeatureCard(
                     title = "CGPA\nRecalculator",
                     subtitle = "Grade improvement",
                     icon = Icons.Default.Autorenew,
@@ -160,16 +151,43 @@ fun HomeScreen(
 
             item {
                 FeatureCard(
-                    title = "Attendance\nCalculator",
-                    subtitle = "Track attendance",
-                    icon = Icons.Default.EventAvailable,
-                    onClick = onNavigateToAttendance
+                    title = "Grade\nCalculator",
+                    subtitle = "Relative grading",
+                    icon = Icons.Default.Functions,
+                    onClick = onNavigateToGradeCalculator
                 )
             }
 
             item(span = { GridItemSpan(2) }) {
                 Text(
                     text = "Tools",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
+                )
+            }
+
+            item {
+                FeatureCard(
+                    title = "CGPA\nEstimator",
+                    subtitle = "Target GPA",
+                    icon = Icons.AutoMirrored.Filled.TrendingUp,
+                    onClick = onNavigateToEstimator
+                )
+            }
+
+            item {
+                FeatureCard(
+                    title = "Saved\nHistory",
+                    subtitle = "Past calculations",
+                    icon = Icons.Default.History,
+                    onClick = onNavigateToHistory
+                )
+            }
+
+            item(span = { GridItemSpan(2) }) {
+                Text(
+                    text = "More",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
@@ -187,19 +205,10 @@ fun HomeScreen(
 
             item {
                 FeatureCard(
-                    title = "Grade\nCalculator",
-                    subtitle = "Relative grading",
-                    icon = Icons.Default.Functions,
-                    onClick = onNavigateToGradeCalculator
-                )
-            }
-
-            item {
-                FeatureCard(
-                    title = "Saved\nHistory",
-                    subtitle = "Past calculations",
-                    icon = Icons.Default.History,
-                    onClick = onNavigateToHistory
+                    title = "Attendance\nCalculator",
+                    subtitle = "Track attendance",
+                    icon = Icons.Default.EventAvailable,
+                    onClick = onNavigateToAttendance
                 )
             }
         }
