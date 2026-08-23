@@ -1,6 +1,6 @@
 # GradeVITian - Android App
 
-A Android application for VIT students to calculate GPA, CGPA, predict grades, and track attendance — built with **Kotlin**, **Jetpack Compose**, and **Firebase**.
+A Android application for VIT students to calculate GPA, CGPA, estimate targets, recalculate CGPA after grade improvements, predict grades, and track attendance — built with **Kotlin**, **Jetpack Compose**, and **Firebase**.
 
 > Inspired from [gradeVITian website](https://gradevitian.in)
 
@@ -8,16 +8,35 @@ A Android application for VIT students to calculate GPA, CGPA, predict grades, a
 
 ## 📱 Features
 
+The home screen groups features into **Calculators**, **Tools**, and **More**.
+
+### Calculators
+
 | Feature | Description |
 |---|---|
-| **GPA Calculator** | Calculate semester GPA from course credits and grades (S/A/B/C/D/E/F/N, excluding P/pass-fail courses).|
+| **GPA Calculator** | Calculate semester GPA from course credits and grades (S/A/B/C/D/E/F/N, excluding P/pass-fail courses). |
 | **CGPA Calculator** | Semester-wise CGPA or instant CGPA from current stats. |
-| **CGPA Estimator** | Find the minimum GPA needed next semester to achieve your target CGPA. |
-| **Attendance Calculator** | Two modes: Simple (present/absent) and Detailed (total classes + present or absent). |
-| **Absolute Grader** | Predict your course grade from CAT, DA, FAT, Lab, and J-Component marks (absolute grading). |
+| **CGPA Recalculator** | See how improving one course grade (e.g. C → B) affects your overall CGPA. |
 | **Grade Calculator** | Relative grading calculator with two modes: compute μ/σ from class totals or enter μ/σ directly. |
-| **Weightage Converter** | Convert marks from one scale to another. |
+
+### Tools
+
+| Feature | Description |
+|---|---|
+| **CGPA Estimator** | Find the minimum GPA needed next semester to achieve your target CGPA. |
 | **Saved History** | Firebase-synced calculation history for GPA, CGPA, and attendance records. |
+
+### More
+
+| Feature | Description |
+|---|---|
+| **Absolute Grader** | Predict your course grade from CAT, DA, FAT, Lab, and J-Component marks (absolute grading). Includes a weightage converter. |
+| **Attendance Calculator** | Two modes: Simple (present/absent) and Detailed (total classes + present or absent). |
+
+### General
+
+| Feature | Description |
+|---|---|
 | **User Account** | Email/Password and Google Sign-In via Firebase Authentication. |
 | **Settings** | Dark mode, dynamic colors (Material You on Android 12+), and Grade Calculator formula mode switch. |
 
@@ -65,6 +84,7 @@ app/src/main/java/me/jitish/gradevitian/
 │   ├── calculator/
 │   │   ├── GpaCalculator.kt       # GPA formula
 │   │   ├── CgpaCalculator.kt      # CGPA + Instant CGPA
+│   │   ├── CgpaRecalculator.kt    # CGPA after course grade improvement
 │   │   ├── CgpaEstimator.kt       # Required GPA estimator
 │   │   ├── AttendanceCalculator.kt # Attendance % (2 formats)
 │   │   ├── AbsoluteGrader.kt      # Absolute grading + Weightage converter
@@ -81,9 +101,10 @@ app/src/main/java/me/jitish/gradevitian/
     │   └── AppNavHost.kt           # Navigation graph
     ├── screens/
     │   ├── auth/                   # Sign In / Sign Up
-    │   ├── home/                   # Dashboard grid
+    │   ├── home/                   # Dashboard grid (Calculators, Tools, More)
     │   ├── gpa/                    # GPA Calculator
     │   ├── cgpa/                   # CGPA Calculator (2 tabs)
+    │   ├── cgparecalc/             # CGPA Recalculator
     │   ├── estimator/              # CGPA Estimator
     │   ├── attendance/             # Attendance Calculator (2 tabs)
     │   ├── gradecalculator/        # Grade Calculator (relative grading)
@@ -193,6 +214,7 @@ Run using android studio...
 | **CGPA** | `Σ(semCredits × semGPA) / Σ(semCredits)`                                                                                                                                                            |
 | **Instant CGPA** | `(semGPA × semCredits + currentCGPA × completedCredits) / (semCredits + completedCredits)`                                                                                                          |
 | **CGPA Estimator** | `requiredGPA = (desiredCGPA × (completed + new) - currentCGPA × completed) / new`                                                                                                                   |
+| **CGPA Recalculator** | `(currentCGPA × totalCredits + (newGradePoint − oldGradePoint) × courseCredits) / totalCredits`                                                                                                          |
 | **Attendance (Simple)** | `present / (present + absent) × 100`                                                                                                                                                                |
 | **Attendance (Detailed)** | `present / total × 100` or `(total - absent) / total × 100`                                                                                                                                         |
 | **Absolute Grader** | Theory: `(CAT1/50×15 + CAT2/50×15 + DA1 + DA2 + DA3 + FAT×40/100)` weighted by credits. Lab: `(internal + FAT×40/50)`. J-comp: `(R1+R2+R3)`. Grade: ≥90=S, ≥80=A, ≥70=B, ≥60=C, ≥55=D, ≥50=E, <50=F |
