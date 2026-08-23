@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
+import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Functions
@@ -47,6 +48,7 @@ fun HomeScreen(
     onNavigateToGpa: () -> Unit,
     onNavigateToCgpa: () -> Unit,
     onNavigateToEstimator: () -> Unit,
+    onNavigateToCgpaRecalculator: () -> Unit,
     onNavigateToAttendance: () -> Unit,
     onNavigateToAbsoluteGrader: () -> Unit,
     onNavigateToGradeCalculator: () -> Unit,
@@ -144,6 +146,15 @@ fun HomeScreen(
                     subtitle = "Target GPA",
                     icon = Icons.AutoMirrored.Filled.TrendingUp,
                     onClick = onNavigateToEstimator
+                )
+            }
+
+            item {
+                FeatureCard(
+                    title = "CGPA\nRecalculator",
+                    subtitle = "Grade improvement",
+                    icon = Icons.Default.Autorenew,
+                    onClick = onNavigateToCgpaRecalculator
                 )
             }
 

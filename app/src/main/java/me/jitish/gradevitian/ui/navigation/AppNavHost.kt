@@ -12,6 +12,7 @@ import me.jitish.gradevitian.ui.screens.attendance.AttendanceScreen
 import me.jitish.gradevitian.ui.screens.auth.AuthScreen
 import me.jitish.gradevitian.ui.screens.auth.AuthViewModel
 import me.jitish.gradevitian.ui.screens.cgpa.CgpaScreen
+import me.jitish.gradevitian.ui.screens.cgparecalc.CgpaRecalculatorScreen
 import me.jitish.gradevitian.ui.screens.estimator.EstimatorScreen
 import me.jitish.gradevitian.ui.screens.gpa.GpaScreen
 import me.jitish.gradevitian.ui.screens.gradecalculator.GradeCalculatorScreen
@@ -57,6 +58,7 @@ fun AppNavHost(
                 onNavigateToGpa = { navController.navigate(Screen.GpaCalculator) },
                 onNavigateToCgpa = { navController.navigate(Screen.CgpaCalculator) },
                 onNavigateToEstimator = { navController.navigate(Screen.CgpaEstimator) },
+                onNavigateToCgpaRecalculator = { navController.navigate(Screen.CgpaRecalculator) },
                 onNavigateToAttendance = { navController.navigate(Screen.AttendanceCalculator) },
                 onNavigateToAbsoluteGrader = { navController.navigate(Screen.AbsoluteGrader) },
                 onNavigateToGradeCalculator = { navController.navigate(Screen.GradeCalculator) },
@@ -77,6 +79,10 @@ fun AppNavHost(
 
         composable<Screen.CgpaEstimator> {
             EstimatorScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable<Screen.CgpaRecalculator> {
+            CgpaRecalculatorScreen(onBack = { navController.popBackStack() })
         }
 
         composable<Screen.AttendanceCalculator> {

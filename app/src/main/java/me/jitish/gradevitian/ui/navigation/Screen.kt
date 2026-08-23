@@ -8,6 +8,7 @@ sealed interface Screen {
     @Serializable data object GpaCalculator : Screen
     @Serializable data object CgpaCalculator : Screen
     @Serializable data object CgpaEstimator : Screen
+    @Serializable data object CgpaRecalculator : Screen
     @Serializable data object AttendanceCalculator : Screen
     @Serializable data object AbsoluteGrader : Screen
     @Serializable data object GradeCalculator : Screen
