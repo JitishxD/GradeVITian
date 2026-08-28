@@ -21,8 +21,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -57,17 +57,19 @@ fun CgpaRecalculatorScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            val tabTitles = listOf("GPA", "CGPA", "CGPA from GPA")
-            ScrollableTabRow(
-                selectedTabIndex = pagerState.currentPage,
-                edgePadding = 16.dp
-            ) {
+            val tabTitles = listOf("GPA", "CGPA", "GPA → CGPA")
+            TabRow(selectedTabIndex = pagerState.currentPage) {
                 tabTitles.forEachIndexed { index, title ->
                     Tab(
                         selected = pagerState.currentPage == index,
                         onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } }
                     ) {
-                        Text(title, modifier = Modifier.padding(16.dp))
+                        Text(
+                            title,
+                            modifier = Modifier.padding(vertical = 12.dp),
+                            maxLines = 1,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
             }

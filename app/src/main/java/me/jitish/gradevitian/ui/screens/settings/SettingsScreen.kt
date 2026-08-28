@@ -1,6 +1,7 @@
 package me.jitish.gradevitian.ui.screens.settings
 
 import android.os.Build
+import me.jitish.gradevitian.BuildConfig
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -144,7 +145,7 @@ fun SettingsScreen(
                     HorizontalDivider()
                     ListItem(
                         headlineContent = { Text("Version") },
-                        supportingContent = { Text("1.0.0") }
+                        supportingContent = { Text(BuildConfig.VERSION_NAME) }
                     )
                     HorizontalDivider()
                     ListItem(
