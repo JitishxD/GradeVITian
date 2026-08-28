@@ -191,4 +191,75 @@ class CgpaRecalculator @Inject constructor() {
             )
         )
     }
+
+    /**
+     * CGPA Recalculator from GPA change — impact of improved semester GPA on overall CGPA.
+     *
+     * Formula: newCGPA = (oldCGPA × totalCredits + (newGPA − oldGPA) × semCredits) / totalCredits
+     */
+    fun recalculateCgpaFromGpaChange(
+        oldCgpa: Double,
+        totalCredits: Int,
+        semCredits: Int,
+        oldGpa: Double,
+        newGpa: Double
+    ): RecalculationValidation {
+        if (oldCgpa <= 0 || totalCredits <= 0 || semCredits <= 0) {
+            return RecalculationValidation.Error(
+                "Kindly check your entries.",
+                "It shouldn't be zero, negative, special, text or empty."
+            )
+        }
+        if (oldCgpa > 10 || oldGpa <= 0 || oldGpa > 10 || newGpa <= 0 || newGpa > 10) {
+            return RecalculationValidation.Error(
+                "Kindly check your entries.",
+                "Average limit (0 < CGPA/GPA <= 10)."
+            )
+        }
+        if (totalCredits > 300 || semCredits > 50) {
+            return RecalculationValidation.Error(
+                "Kindly check your entries.",
+                "Credits limitation (1 <= Total Credits <= 300 & 1 <= Semester Credits <= 50). Exclude P/pass-fail credits."
+            )
+        }
+        if (semCredits > totalCredits) {
+            return RecalculationValidation.Error(
+                "Semester credits cannot exceed total credits.",
+                "Total credits should include this semester."
+            )
+        }
+
+        val weightedSum = oldCgpa * totalCredits + (newGpa - oldGpa) * semCredits
+        val newCgpa = weightedSum / totalCredits
+
+        if (newCgpa <= 0) {
+            return RecalculationValidation.Error("Oops! Your entries are incorrect.")
+        }
+        if (newCgpa > 10) {
+            return RecalculationValidation.Error(
+                "Invalid input. Kindly check your entries.",
+                "Recalculated CGPA cannot exceed 10."
+            )
+        }
+
+        val oldRounded = String.format(Locale.US, "%.4f", oldCgpa).toDouble()
+        val newRounded = String.format(Locale.US, "%.4f", newCgpa).toDouble()
+        val delta = String.format(Locale.US, "%.4f", newRounded - oldRounded).toDouble()
+
+        val message = when {
+            delta > 0 && newRounded >= 9.0 -> "Nice improvement! Keep it up and Happy Learning!"
+            delta > 0 -> "Your CGPA improved. Happy Learning!"
+            delta < 0 -> "Your CGPA decreased. Double-check your entries."
+            else -> "No change — old and new GPAs are the same."
+        }
+
+        return RecalculationValidation.Success(
+            RecalculationResult(
+                oldCgpa = oldRounded,
+                newCgpa = newRounded,
+                delta = delta,
+                message = message
+            )
+        )
+    }
 }

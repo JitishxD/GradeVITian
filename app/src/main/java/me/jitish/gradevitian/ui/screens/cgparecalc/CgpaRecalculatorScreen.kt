@@ -21,8 +21,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -46,7 +46,7 @@ fun CgpaRecalculatorScreen(
     viewModel: CgpaRecalculatorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val pagerState = rememberPagerState(pageCount = { 2 })
+    val pagerState = rememberPagerState(pageCount = { 3 })
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -57,8 +57,11 @@ fun CgpaRecalculatorScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            val tabTitles = listOf("GPA", "CGPA")
-            TabRow(selectedTabIndex = pagerState.currentPage) {
+            val tabTitles = listOf("GPA", "CGPA", "CGPA from GPA")
+            ScrollableTabRow(
+                selectedTabIndex = pagerState.currentPage,
+                edgePadding = 16.dp
+            ) {
                 tabTitles.forEachIndexed { index, title ->
                     Tab(
                         selected = pagerState.currentPage == index,
@@ -76,122 +79,14 @@ fun CgpaRecalculatorScreen(
                 when (page) {
                     0 -> GpaRecalcTab(uiState, viewModel)
                     1 -> CgpaRecalcTab(uiState, viewModel)
+                    2 -> CgpaFromGpaTab(uiState, viewModel)
                 }
             }
         }
     }
 }
 
-@Composable
-private fun CgpaRecalcTab(uiState: CgpaRecalculatorUiState, viewModel: CgpaRecalculatorViewModel) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = boldTextParts(
-                    text = "See how improving one course grade (e.g. C → B) affects your CGPA. \nEnter graded credits only; exclude P/pass-fail.",
-                    "P/pass-fail"
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        item {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                )
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text("Current Status", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        OutlinedTextField(
-                            value = uiState.currentCgpa,
-                            onValueChange = { viewModel.updateField("currentCgpa", it) },
-                            label = { Text("Current CGPA") },
-                            modifier = Modifier.weight(1f),
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-                        )
-                        OutlinedTextField(
-                            value = uiState.totalCredits,
-                            onValueChange = { viewModel.updateField("totalCredits", it) },
-                            label = { Text("Total Credits") },
-                            modifier = Modifier.weight(1f),
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            supportingText = { Text("All semesters") }
-                        )
-                    }
-
-                    HorizontalDivider()
-                    Text(
-                        "Improved Course",
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    OutlinedTextField(
-                        value = uiState.courseCredits,
-                        onValueChange = { if (it.length <= 2) viewModel.updateField("courseCredits", it) },
-                        label = { Text("Course Credits") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        DropdownSelector(
-                            label = "Old Grade",
-                            options = GRADE_OPTIONS,
-                            selected = uiState.oldGrade,
-                            onSelected = { viewModel.updateField("oldGrade", it) },
-                            modifier = Modifier.weight(1f)
-                        )
-                        DropdownSelector(
-                            label = "New Grade",
-                            options = GRADE_OPTIONS,
-                            selected = uiState.newGrade,
-                            onSelected = { viewModel.updateField("newGrade", it) },
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-            }
-        }
-
-        item {
-            ActionButtons(
-                onCalculate = viewModel::calculate,
-                onReset = viewModel::reset
-            )
-        }
-
-        item {
-            AnimatedVisibility(
-                visible = uiState.resultTitle != null,
-                enter = fadeIn() + slideInVertically()
-            ) {
-                ResultCard(
-                    title = uiState.resultTitle ?: "",
-                    subtitle = uiState.resultSubtitle ?: "",
-                    isError = uiState.isError
-                )
-            }
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-    }
-}
+// ── Tab 1: GPA Recalculator ──
 
 @Composable
 private fun GpaRecalcTab(uiState: CgpaRecalculatorUiState, viewModel: CgpaRecalculatorViewModel) {
@@ -297,6 +192,234 @@ private fun GpaRecalcTab(uiState: CgpaRecalculatorUiState, viewModel: CgpaRecalc
                     title = uiState.gpaResultTitle ?: "",
                     subtitle = uiState.gpaResultSubtitle ?: "",
                     isError = uiState.gpaIsError
+                )
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+    }
+}
+
+// ── Tab 2: CGPA from GPA ──
+
+@Composable
+private fun CgpaFromGpaTab(uiState: CgpaRecalculatorUiState, viewModel: CgpaRecalculatorViewModel) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = boldTextParts(
+                    text = "Recalculate your CGPA using the old and new semester GPA. \nExclude P/pass-fail credits from both credit fields.",
+                    "P/pass-fail"
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        item {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text("Current Status", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        OutlinedTextField(
+                            value = uiState.cgpaFromGpaOldCgpa,
+                            onValueChange = { viewModel.updateCgpaFromGpaField("oldCgpa", it) },
+                            label = { Text("CGPA") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                        )
+                        OutlinedTextField(
+                            value = uiState.cgpaFromGpaTotalCredits,
+                            onValueChange = { viewModel.updateCgpaFromGpaField("totalCredits", it) },
+                            label = { Text("Total Credits") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            supportingText = { Text("All semesters") }
+                        )
+                    }
+
+                    HorizontalDivider()
+                    Text(
+                        "Improved Semester",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.cgpaFromGpaSemCredits,
+                        onValueChange = { if (it.length <= 2) viewModel.updateCgpaFromGpaField("semCredits", it) },
+                        label = { Text("Semester Credits") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        OutlinedTextField(
+                            value = uiState.cgpaFromGpaOldGpa,
+                            onValueChange = { viewModel.updateCgpaFromGpaField("oldGpa", it) },
+                            label = { Text("Old GPA") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                        )
+                        OutlinedTextField(
+                            value = uiState.cgpaFromGpaNewGpa,
+                            onValueChange = { viewModel.updateCgpaFromGpaField("newGpa", it) },
+                            label = { Text("New GPA") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                        )
+                    }
+                }
+            }
+        }
+
+        item {
+            ActionButtons(
+                onCalculate = viewModel::calculateCgpaFromGpa,
+                onReset = viewModel::resetCgpaFromGpa
+            )
+        }
+
+        item {
+            AnimatedVisibility(
+                visible = uiState.cgpaFromGpaResultTitle != null,
+                enter = fadeIn() + slideInVertically()
+            ) {
+                ResultCard(
+                    title = uiState.cgpaFromGpaResultTitle ?: "",
+                    subtitle = uiState.cgpaFromGpaResultSubtitle ?: "",
+                    isError = uiState.cgpaFromGpaIsError
+                )
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+    }
+}
+
+// ── Tab 3: CGPA Recalculator (direct) ──
+
+@Composable
+private fun CgpaRecalcTab(uiState: CgpaRecalculatorUiState, viewModel: CgpaRecalculatorViewModel) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = boldTextParts(
+                    text = "See how improving one course grade (e.g. C → B) affects your CGPA. \nEnter graded credits only; exclude P/pass-fail.",
+                    "P/pass-fail"
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        item {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text("Current Status", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        OutlinedTextField(
+                            value = uiState.currentCgpa,
+                            onValueChange = { viewModel.updateField("currentCgpa", it) },
+                            label = { Text("Current CGPA") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                        )
+                        OutlinedTextField(
+                            value = uiState.totalCredits,
+                            onValueChange = { viewModel.updateField("totalCredits", it) },
+                            label = { Text("Total Credits") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            supportingText = { Text("All semesters") }
+                        )
+                    }
+
+                    HorizontalDivider()
+                    Text(
+                        "Improved Course",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.courseCredits,
+                        onValueChange = { if (it.length <= 2) viewModel.updateField("courseCredits", it) },
+                        label = { Text("Course Credits") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        DropdownSelector(
+                            label = "Old Grade",
+                            options = GRADE_OPTIONS,
+                            selected = uiState.oldGrade,
+                            onSelected = { viewModel.updateField("oldGrade", it) },
+                            modifier = Modifier.weight(1f)
+                        )
+                        DropdownSelector(
+                            label = "New Grade",
+                            options = GRADE_OPTIONS,
+                            selected = uiState.newGrade,
+                            onSelected = { viewModel.updateField("newGrade", it) },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            }
+        }
+
+        item {
+            ActionButtons(
+                onCalculate = viewModel::calculate,
+                onReset = viewModel::reset
+            )
+        }
+
+        item {
+            AnimatedVisibility(
+                visible = uiState.resultTitle != null,
+                enter = fadeIn() + slideInVertically()
+            ) {
+                ResultCard(
+                    title = uiState.resultTitle ?: "",
+                    subtitle = uiState.resultSubtitle ?: "",
+                    isError = uiState.isError
                 )
             }
             Spacer(modifier = Modifier.height(32.dp))
