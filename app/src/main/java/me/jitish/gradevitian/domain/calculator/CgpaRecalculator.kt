@@ -105,4 +105,90 @@ class CgpaRecalculator @Inject constructor() {
             )
         )
     }
+
+    /**
+     * GPA Recalculator — impact of improving one course grade on semester GPA.
+     *
+     * Formula: newGPA = (currentGPA × semTotalCredits + (newGradePoint − oldGradePoint) × courseCredits) / semTotalCredits
+     */
+    fun recalculateGpaFromGradeChange(
+        currentGpa: Double,
+        semTotalCredits: Int,
+        courseCredits: Int,
+        oldGrade: Grade,
+        newGrade: Grade
+    ): RecalculationValidation {
+        if (currentGpa <= 0 || semTotalCredits <= 0 || courseCredits <= 0) {
+            return RecalculationValidation.Error(
+                "Kindly check your entries.",
+                "It shouldn't be zero, negative, special, text or empty."
+            )
+        }
+        if (currentGpa > 10) {
+            return RecalculationValidation.Error(
+                "Kindly check your entries.",
+                "Average limit (0 < GPA <= 10)."
+            )
+        }
+        if (semTotalCredits > 50 || courseCredits > 50) {
+            return RecalculationValidation.Error(
+                "Kindly check your entries.",
+                "Credits limitation (1 <= Semester Credits <= 50 & 1 <= Course Credits <= 50). Exclude P/pass-fail credits."
+            )
+        }
+        if (courseCredits > semTotalCredits) {
+            return RecalculationValidation.Error(
+                "Course credits cannot exceed semester credits.",
+                "Semester credits should include this course."
+            )
+        }
+
+        val oldPoint = oldGrade.gradePoint
+        val newPoint = newGrade.gradePoint
+        if (!oldGrade.countsTowardGpa || oldPoint == null || oldGrade == Grade.NONE) {
+            return RecalculationValidation.Error(
+                "Select a valid old grade.",
+                "P/pass-fail and empty grades are excluded from GPA."
+            )
+        }
+        if (!newGrade.countsTowardGpa || newPoint == null || newGrade == Grade.NONE) {
+            return RecalculationValidation.Error(
+                "Select a valid new grade.",
+                "P/pass-fail and empty grades are excluded from GPA."
+            )
+        }
+
+        val weightedSum = currentGpa * semTotalCredits + (newPoint - oldPoint) * courseCredits
+        val newGpa = weightedSum / semTotalCredits
+
+        if (newGpa <= 0) {
+            return RecalculationValidation.Error("Oops! Your entries are incorrect.")
+        }
+        if (newGpa > 10) {
+            return RecalculationValidation.Error(
+                "Invalid input. Kindly check your entries.",
+                "Recalculated GPA cannot exceed 10."
+            )
+        }
+
+        val oldRounded = String.format(Locale.US, "%.4f", currentGpa).toDouble()
+        val newRounded = String.format(Locale.US, "%.4f", newGpa).toDouble()
+        val delta = String.format(Locale.US, "%.4f", newRounded - oldRounded).toDouble()
+
+        val message = when {
+            delta > 0 && newRounded >= 9.0 -> "Nice improvement! Keep it up and Happy Learning!"
+            delta > 0 -> "Your GPA improved. Happy Learning!"
+            delta < 0 -> "Your GPA decreased. Double-check your entries."
+            else -> "No change — old and new grades are the same."
+        }
+
+        return RecalculationValidation.Success(
+            RecalculationResult(
+                oldCgpa = oldRounded,
+                newCgpa = newRounded,
+                delta = delta,
+                message = message
+            )
+        )
+    }
 }
